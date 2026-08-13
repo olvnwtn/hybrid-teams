@@ -1,4 +1,4 @@
-# Author: Olivia B. Newton and Tyler R. Talbot
+# Authors: Olivia B. Newton and Tyler R. Talbot
 # Purpose: Read raw data from data/raw/ into R without modifying it.
 #          Cleaning and transformation happen in the 02_clean_*.R scripts.
 
@@ -33,14 +33,14 @@ survey_raw <- read.csv(here("data", "raw", "qualtrics",
 # Zoom --------------------------------------------------------------------
 
 zoom_raw <- read.csv(here("data", "raw", "zoom",
-                          "expert_participation_utterances_w-teamdata.csv"))
+                          "expert_participation.csv"))
 
 # Experiment design -------------------------------------------------------
 
 team_assign_raw <- read.csv(here("data", "raw", "design",
-                                 "teamRandomAssign_forConditions.csv"))
+                                 "team_condition_assignments.csv"))
 
 constraint_combos_raw <- read_xlsx(
-  here("data", "raw", "design", "RoomAssignment_ConstraintCombos.xlsx"),
+  here("data", "raw", "design", "room_assignment_constraint_combos.xlsx"),
   sheet = "Experts_Contraints_All"
 )
