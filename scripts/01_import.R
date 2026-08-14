@@ -12,17 +12,17 @@ empirica_dir <- here("data", "raw", "empirica")
 
 stages_raw <- list.files(empirica_dir, pattern = "^stages\\.csv$",
                          recursive = TRUE, full.names = TRUE) |>
-  map(read.csv) |>
+  map(\(f) read.csv(f, colClasses = "character")) |>
   list_rbind()
 
 players_raw <- list.files(empirica_dir, pattern = "^players\\.csv$",
                           recursive = TRUE, full.names = TRUE) |>
-  map(read.csv) |>
+  map(\(f) read.csv(f, colClasses = "character")) |>
   list_rbind()
 
 player_stages_raw <- list.files(empirica_dir, pattern = "^player-stages\\.csv$",
                                 recursive = TRUE, full.names = TRUE) |>
-  map(read.csv) |>
+  map(\(f) read.csv(f, colClasses = "character")) |>
   list_rbind()
 
 # Qualtrics ---------------------------------------------------------------
