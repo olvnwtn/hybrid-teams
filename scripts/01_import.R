@@ -28,7 +28,7 @@ player_stages_raw <- list.files(empirica_dir, pattern = "^player-stages\\.csv$",
 # Qualtrics ---------------------------------------------------------------
 
 survey_raw <- read.csv(here("data", "raw", "qualtrics",
-                            "survey_numeric.csv.csv"))
+                            "survey_numeric.csv"))
 
 # Zoom --------------------------------------------------------------------
 
