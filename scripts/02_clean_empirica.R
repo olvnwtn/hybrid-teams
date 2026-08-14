@@ -19,8 +19,7 @@ players_clean <- players_raw |>
 
 # Link stages to teams ----------------------------------------------------
 
-stage_team <- player_stages_raw |>
-  inner_join(players_clean, by = "playerId") |>
+id_list <- merge(players_clean, player_stages_raw, by = "playerId") |>
   distinct(stageId, team_id) |>
   mutate(
     condition = case_when(
@@ -34,24 +33,25 @@ stage_team <- player_stages_raw |>
       condition %in% c("F2F", "Remote"), "Matched", "Mixed"
     )
   ) |>
-  filter(condition != "")   # empty condition means test data
+  subset(condition != "")
 
-empirica_clean <- stages_clean |>
-  right_join(stage_team, by = "stageId")
+empirica_clean <- merge(stages_clean, id_list, by = "stageId", all.y = TRUE)
 
 # Derive expert in-app action count ---------------------------------------
-# The participation log is a packed text field untangled here with fragile
-# string operations ported from the original. Validate exp_part_inApp per
-# team against the original output before relying on it.
+# The participation log column holds multiple events nested in each cell.
+# The code below separates those events into rows and splits each into
+# columns.
 
 expert_actions <- empirica_clean |>
   select(team_id, participation) |>
   mutate(across(everything(), ~ map_chr(.x, ~ gsub("\"", "", .x)))) |>
   separate_rows(participation, sep = "}") |>
-  filter(participation != "",
-         !str_detect(participation, "roundStarted")) |>
-  mutate(participation = gsub("\\{|\\]", "", str_trim(participation)),
-         participation = sub(".", "", participation))
+  subset(participation != "")
+
+expert_actions <- expert_actions[!grepl("roundStarted", expert_actions$participation), ]
+
+expert_actions["participation"] <- gsub("\\{|\\]", "", str_trim(expert_actions[["participation"]], "both"))
+expert_actions["participation"] <- sub(".", "", expert_actions[["participation"]])
 
 expert_actions[c("action", "playerId", "student", "time")] <-
   str_split_fixed(expert_actions$participation, ",", 4)
@@ -59,9 +59,13 @@ expert_actions[c("action", "playerId", "student", "time")] <-
 expert_actions <- expert_actions |>
   select(-participation, -time) |>
   mutate(across(everything(), ~ map_chr(.x, ~ gsub(".*:", "", .x)))) |>
-  inner_join(players_clean, by = c("team_id", "playerId")) |>
-  filter(action != "playerSatisfaction",
-         str_detect(id, "A")) |>   # "A" marks the team's expert
+  select(team_id, playerId, action, student)
+
+expert_actions <- merge(expert_actions, players_clean, by = c("team_id", "playerId")) |>
+  subset(action != "playerSatisfaction") |>
+  filter(str_detect(id, "A"))
+
+expert_actions <- expert_actions |>
   count(id, name = "exp_part_inApp") |>
   mutate(team_id = str_extract(id, "[^_]*_[^_]*")) |>
   select(team_id, exp_part_inApp)
