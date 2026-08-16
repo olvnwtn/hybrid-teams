@@ -1,5 +1,5 @@
 # Authors: Olivia B. Newton and Tyler R. Talbot
-# Purpose: Clean the raw Empirica frames and derive the expert's in-app
+# Purpose: Clean the raw Empirica data and derive the expert's in-app
 #          action count. Produces one Empirica dataset for the merge step.
 
 # Clean stages ------------------------------------------------------------
@@ -73,3 +73,7 @@ expert_actions <- expert_actions |>
 empirica_clean <- empirica_clean |>
   left_join(expert_actions, by = "team_id") |>
   select(-participation)   # raw log no longer needed
+
+# Save processed data -----------------------------------------------------
+
+write_csv(empirica_clean, here("data", "processed", "empirica_clean.csv"))
