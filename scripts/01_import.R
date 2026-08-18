@@ -40,8 +40,8 @@ survey_raw <- read.csv(here("data", "raw", "qualtrics",
   clean_names()
 
 # Zoom --------------------------------------------------------------------
-# Expert participation: utterance count per participant, derived from
-# session audio and video recordings
+# Expert participation: total seconds of expert communication per team,
+# derived from session audio and video recordings
 
 zoom_raw <- read.csv(here("data", "raw", "zoom",
                           "expert_participation.csv")) |>
