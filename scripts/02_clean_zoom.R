@@ -4,8 +4,9 @@
 # Clean Zoom data ---------------------------------------------------------
 
 zoom_clean <- zoom_raw |>
-  rename(team_id = session_id,
-         exp_part_in_zoom = participation_secs)
+  separate(session_id, into = c("condition_no", "team_no"), sep = "_") |>
+  mutate(team_id = paste(team_no, condition_no, sep = "_")) |>
+  select(team_id, exp_part_in_zoom = participation_secs)
 
 # Save processed data -----------------------------------------------------
 
