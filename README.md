@@ -1,6 +1,6 @@
 # Hybrid Teams Project
 
-Replication package for "Redacted" by Tyler R. Talbot, Olivia B. Newton, and Bryan L. Bonner.
+Replication package for "Redacted" by 
 
 ## Overview
 
