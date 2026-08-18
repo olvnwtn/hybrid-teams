@@ -8,7 +8,7 @@
 # players.csv: player IDs and participant IDs
 # player-stages.csv: links players to stages
 
-# Each experimental session has its own subfolder holding the same CSV files 
+# Each experimental session has its own subfolder holding the same CSV files
 # Read every matching file across sessions and stack them into one data frame
 
 empirica_dir <- here("data", "raw", "empirica")
@@ -57,5 +57,6 @@ team_assign_raw <- read.csv(here("data", "raw", "design",
 
 constraint_combos_raw <- read_xlsx(
   here("data", "raw", "design", "room_assignment_constraint_combos.xlsx"),
-  sheet = "Experts_Contraints_All") |>
+  sheet = "Experts_Contraints_All"
+) |>
   clean_names()
