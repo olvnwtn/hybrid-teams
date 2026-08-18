@@ -19,17 +19,13 @@ in this study are confidential and are not included in this package.
 
 ### Software Requirements
 
-- R 
-- Platform: macOS
-- Packages: 
-
 ### Controlled Randomness
 
 ## Description of Programs / Code
 
 Scripts are in `scripts/`, run in numbered order:
 
-## Instructions to Replicators
+## Instructions
 
 ## List of Figures and Programs
 
