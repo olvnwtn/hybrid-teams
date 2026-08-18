@@ -42,7 +42,7 @@ condition_descriptives <- merged_team |>
                      conscientiousness_team_mean, neuroticism_team_mean,
                      openness_team_mean, remain_team_mean,
                      viability_team_mean),
-                   list(mean = mean, sd = sd),
+                   list(mean = mean, sd = sd, median = median),
                    .names = "{.col}_{.fn}"))
 
 # Descriptives by virtuality ----------------------------------------------
@@ -55,5 +55,5 @@ virtuality_descriptives <- merged_team |>
                      conscientiousness_team_mean, neuroticism_team_mean,
                      openness_team_mean, remain_team_mean,
                      viability_team_mean),
-                   list(mean = mean, sd = sd),
+                   list(mean = mean, sd = sd, median = median),
                    .names = "{.col}_{.fn}"))
