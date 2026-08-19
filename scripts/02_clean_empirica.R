@@ -40,7 +40,10 @@ id_list <- players_clean |>
     ), levels = c("F2F", "Remote", "Hybrid RE", "Hybrid CE")),
     virtuality_condition = factor(if_else(
       condition %in% c("F2F", "Remote"), "Matched", "Mixed"
-    ), levels = c("Matched", "Mixed"))
+    ), levels = c("Matched", "Mixed")),
+    expert_location = factor(if_else(
+      condition %in% c("F2F", "Hybrid CE"), "Co-located", "Remote"
+    ), levels = c("Co-located", "Remote")),
   ) |>
   filter(!is.na(condition))
 
