@@ -46,6 +46,9 @@ survey_clean <- survey_raw |>
     virtuality_condition = factor(if_else(condition %in% c("F2F", "Remote"),
                                           "Matched", "Mixed"),
                                   levels = c("Matched", "Mixed")),
+    expert_location = factor(if_else(
+      condition %in% c("F2F", "Hybrid CE"), "Co-located", "Remote"
+    ), levels = c("Co-located", "Remote")),
     age = as.numeric(age),
     sex = factor(sex),
     across(c(starts_with("demonstrability"),
