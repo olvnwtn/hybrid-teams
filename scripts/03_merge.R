@@ -1,5 +1,5 @@
 # Authors: Olivia B. Newton and Tyler R. Talbot
-# Purpose: Merge all cleaned data into single data frame for analysis. 
+# Purpose: Merge all cleaned data into single data frame for analysis.
 #          Additionally, derive expert influence measures.
 
 # Read processed data -----------------------------------------------------
@@ -16,7 +16,8 @@ virtuality_levels <- c("Matched", "Mixed")
 
 empirica_clean <- empirica_clean |>
   mutate(condition = factor(condition, levels = condition_levels),
-         virtuality_condition = factor(virtuality_condition, levels = virtuality_levels))
+         virtuality_condition = factor(virtuality_condition,
+                                       levels = virtuality_levels))
 
 design_clean <- design_clean |>
   mutate(condition = factor(condition, levels = condition_levels),
@@ -48,7 +49,8 @@ merged_team <- merged_team |>
   rowwise() |>
   mutate(
     violated_count_all = length(violated_constraints),
-    violated_count_expert = sum(experts_unique_constraints %in% violated_constraints),
+    violated_count_expert = sum(experts_unique_constraints %in%
+                                  violated_constraints),
     expert_influence = (6 - violated_count_expert) / 6,
     proportional_exp_inf = violated_count_expert / violated_count_all
   ) |>
