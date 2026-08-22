@@ -17,7 +17,7 @@ psych::alpha(select(survey_processed, c("big5_1", "big5_6")),
 
 psych::alpha(select(survey_processed, c("big5_2", "big5_7")),
              check.keys = TRUE)  # agreeableness
-# low reliability may be due to wrong word used in item (trusting vs trustworthy)
+# low reliability may be due to wrong word in item (trusting vs trustworthy)
 
 psych::alpha(select(survey_processed, c("big5_3", "big5_8")),
              check.keys = TRUE)  # conscientiousness
@@ -35,5 +35,6 @@ psych::alpha(select(survey_processed, starts_with("intent_remain")),
 
 # Reliability: Team viability ---------------------------------------------
 
-psych::alpha(select(survey_processed, c("satis1", "satis2", "satis3", "satis4")),
+psych::alpha(select(survey_processed,
+                    c("satis1", "satis2", "satis3", "satis4")),
              check.keys = TRUE)
