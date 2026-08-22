@@ -62,3 +62,9 @@ med_remote_hybrid_ce <- mediation::mediate(mod_mediator, mod_outcome,
                                            control.value = "Remote",
                                            treat.value = "Hybrid CE")
 summary(med_remote_hybrid_ce)
+
+# Unmeasured confounding test ---------------------------------------------
+
+sens_f2f_remote <- mediation::medsens(med_f2f_remote, rho.by = 0.05)
+summary(sens_f2f_remote)
+plot(sens_f2f_remote)
