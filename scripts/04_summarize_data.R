@@ -4,7 +4,7 @@
 
 # Read data ---------------------------------------------------------------
 
-merged_team <- read_csv(here("data", "processed", "merged_team.csv"))
+team_data <- read_csv(here("data", "processed", "merged_team.csv"))
 survey_processed <- read_csv(here("data", "processed", "survey_individual.csv"))
 
 # Demographics ------------------------------------------------------------
@@ -14,7 +14,7 @@ summary(factor(survey_processed$sex))
 
 # Correlation table with means and SDs ------------------------------------
 
-corr_vars <- merged_team |>
+corr_vars <- team_data |>
   select(expert_influence,
          demon_team_median,
          performance_score,
@@ -36,7 +36,7 @@ correlations_sig <- Hmisc::rcorr(as.matrix(corr_vars),
 
 # Descriptives by condition -----------------------------------------------
 
-condition_descriptives <- merged_team |>
+condition_descriptives <- team_data |>
   group_by(condition) |>
   summarise(across(c(performance_score, expert_influence,
                      demon_team_median,
@@ -49,7 +49,7 @@ condition_descriptives <- merged_team |>
 
 # Descriptives by virtuality ----------------------------------------------
 
-virtuality_descriptives <- merged_team |>
+virtuality_descriptives <- team_data |>
   group_by(virtuality_condition) |>
   summarise(across(c(performance_score, expert_influence,
                      demon_team_median,
@@ -62,7 +62,7 @@ virtuality_descriptives <- merged_team |>
 
 # Descriptives by expert location -----------------------------------------
 
-location_descriptives <- merged_team |>
+location_descriptives <- team_data |>
   group_by(expert_location) |>
   summarise(across(c(performance_score, expert_influence,
                      demon_team_median,
@@ -75,32 +75,32 @@ location_descriptives <- merged_team |>
 
 # Sample-level distributions ----------------------------------------------
 
-hist(merged_team$performance_score, main = "Performance Score", xlab = "Score")
-hist(merged_team$demon_team_median, main = "Demonstrability", xlab = "Median")
-hist(merged_team$expert_influence, main = "Expert Influence", xlab = "Proportion")
-hist(merged_team$exp_part_in_zoom, main = "Expert Speaking Time", xlab = "Seconds")
-hist(merged_team$exp_part_in_app, main = "Expert In-App Actions", xlab = "Count")
+hist(team_data$performance_score, main = "Performance Score", xlab = "Score")
+hist(team_data$demon_team_median, main = "Demonstrability", xlab = "Median")
+hist(team_data$expert_influence, main = "Expert Influence", xlab = "Proportion")
+hist(team_data$exp_part_in_zoom, main = "Expert Speaking Time", xlab = "Seconds")
+hist(team_data$exp_part_in_app, main = "Expert In-App Actions", xlab = "Count")
 
-barplot(table(merged_team$condition), main = "Teams by Condition")
-barplot(table(merged_team$virtuality_condition), main = "Teams by Virtuality")
-barplot(table(merged_team$expert_location), main = "Teams by Expert Location")
+barplot(table(team_data$condition), main = "Teams by Condition")
+barplot(table(team_data$virtuality_condition), main = "Teams by Virtuality")
+barplot(table(team_data$expert_location), main = "Teams by Expert Location")
 
 # Distributions by condition ----------------------------------------------
 
-boxplot(performance_score ~ condition, data = merged_team, main = "Performance by Condition")
-boxplot(demon_team_median ~ condition, data = merged_team, main = "Demonstrability by Condition")
-boxplot(expert_influence ~ condition, data = merged_team, main = "Expert Influence by Condition")
-boxplot(exp_part_in_zoom ~ condition, data = merged_team, main = "Speaking Time by Condition")
-boxplot(exp_part_in_app ~ condition, data = merged_team, main = "In-App Actions by Condition")
+boxplot(performance_score ~ condition, data = team_data, main = "Performance by Condition")
+boxplot(demon_team_median ~ condition, data = team_data, main = "Demonstrability by Condition")
+boxplot(expert_influence ~ condition, data = team_data, main = "Expert Influence by Condition")
+boxplot(exp_part_in_zoom ~ condition, data = team_data, main = "Speaking Time by Condition")
+boxplot(exp_part_in_app ~ condition, data = team_data, main = "In-App Actions by Condition")
 
 # Distributions by virtuality ---------------------------------------------
 
-boxplot(performance_score ~ virtuality_condition, data = merged_team, main = "Performance by Virtuality")
-boxplot(demon_team_median ~ virtuality_condition, data = merged_team, main = "Demonstrability by Virtuality")
-boxplot(expert_influence ~ virtuality_condition, data = merged_team, main = "Expert Influence by Virtuality")
+boxplot(performance_score ~ virtuality_condition, data = team_data, main = "Performance by Virtuality")
+boxplot(demon_team_median ~ virtuality_condition, data = team_data, main = "Demonstrability by Virtuality")
+boxplot(expert_influence ~ virtuality_condition, data = team_data, main = "Expert Influence by Virtuality")
 
 # Distributions by expert location ----------------------------------------
 
-boxplot(performance_score ~ expert_location, data = merged_team, main = "Performance by Expert Location")
-boxplot(demon_team_median ~ expert_location, data = merged_team, main = "Demonstrability by Expert Location")
-boxplot(expert_influence ~ expert_location, data = merged_team, main = "Expert Influence by Expert Location")
+boxplot(performance_score ~ expert_location, data = team_data, main = "Performance by Expert Location")
+boxplot(demon_team_median ~ expert_location, data = team_data, main = "Demonstrability by Expert Location")
+boxplot(expert_influence ~ expert_location, data = team_data, main = "Expert Influence by Expert Location")
