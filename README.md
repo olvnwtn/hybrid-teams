@@ -23,8 +23,6 @@ in this study are confidential and are not included in this package.
 
 ## Description of Programs/Code
 
-## Description of Code
-
 Scripts are in `scripts/`. Run `run_all.R` to execute the full pipeline, or run the numbered scripts in order:
 
 * `00_load_packages.R` - Load packages (versions recorded by renv)
