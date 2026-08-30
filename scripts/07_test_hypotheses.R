@@ -53,9 +53,22 @@ effectsize::F_to_eta2(
   alternative = "two.sided"
 )
 
-# Post hoc pairwise comparisons with Tukey adjustment
+# Planned contrasts for H1A and H1B with Holm correction
+# Cell order: Matched/Co-located, Matched/Remote,
+#             Mixed/Co-located, Mixed/Remote
 
-art.con(art_mod, "virtuality_condition:expert_location")
+art_lm <- artlm.con(art_mod, "virtuality_condition:expert_location")
+
+h1_contrasts <- emmeans::contrast(
+  emmeans::emmeans(art_lm, ~ virtuality_conditionexpert_location),
+  method = list(
+    "H1A: F2F vs Remote" = c(1, -1, 0, 0),
+    "H1B: Remote vs Hybrid" = c(0, 1, -0.5, -0.5)
+  ),
+  adjust = "holm"
+)
+summary(h1_contrasts)
+confint(h1_contrasts)
 
 # H2: Performance ~ virtuality x expert location -------------------------
 
@@ -93,6 +106,23 @@ emmeans::emmeans(mod_perf,
 confint(emmeans::emmeans(mod_perf,
                          pairwise ~ virtuality_condition * expert_location,
                          adjust = "tukey")$contrasts)
+
+# Planned contrasts for H2A, H2B, H2C with Holm correction
+# Cell order: Matched/Co-located, Mixed/Co-located,
+#             Matched/Remote, Mixed/Remote
+
+h2_contrasts <- emmeans::contrast(
+  emmeans::emmeans(mod_perf,
+                   ~ virtuality_condition * expert_location),
+  method = list(
+    "H2A: F2F vs Remote" = c(1, 0, -1, 0),
+    "H2B: Remote vs Hybrid" = c(0, -0.5, 1, -0.5),
+    "H2C: Hybrid CE vs Hybrid RE" = c(0, 1, 0, -1)
+  ),
+  adjust = "holm"
+)
+summary(h2_contrasts)
+confint(h2_contrasts)
 
 # H3: Mediation analyses --------------------------------------------------
 
