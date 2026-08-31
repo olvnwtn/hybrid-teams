@@ -59,20 +59,14 @@ p <- ggboxplot(team_data,
 # Cross-panel bracket (virtuality main effect) plus
 # within-panel bracket (H1A: F2F vs Remote) ------------------------------
 
-y_bar <- unit(1, "npc") - unit(9, "mm")  # virtuality
-y_tip <- y_bar - unit(3, "mm")
-y_lab <- unit(1, "npc") - unit(6, "mm")
+y_lab  <- y_bar - unit(1.2, "mm")
+y_lab2 <- y_bar2 - unit(1.2, "mm")
 
-y_bar2 <- unit(1, "npc") - unit(20, "mm") # h1a
-y_tip2 <- y_bar2 - unit(3, "mm")
-y_lab2 <- unit(1, "npc") - unit(17, "mm")
+lab <- textGrob("*", x = 0.5, y = y_lab, vjust = 0.5,
+                gp = gpar(fontfamily = "Times New Roman", fontsize = 14))
 
-lab <- textGrob(expression(italic(p)~"= .013"), x = 0.5, y = y_lab,
-                gp = gpar(fontfamily = "Times New Roman", fontsize = 10))
-
-lab2 <- textGrob(expression(italic(p)~"= .039"), x = 0.25, y = y_lab2,
-                 gp = gpar(fontfamily = "Times New Roman", fontsize = 10))
-
+lab2 <- textGrob("*", x = 0.25, y = y_lab2, vjust = 0.5,
+                 gp = gpar(fontfamily = "Times New Roman", fontsize = 14))
 bracket <- grobTree(
   segmentsGrob(x0 = 0.25, x1 = 0.75, y0 = y_bar, y1 = y_bar),
   segmentsGrob(x0 = 0.25, x1 = 0.25, y0 = y_bar, y1 = y_tip),
@@ -162,6 +156,11 @@ y_lab <- unit(1, "npc") - unit(5, "mm")
 
 lab <- textGrob(expression(italic(p)~"= .019"), x = 0.5, y = y_lab,
                 gp = gpar(fontfamily = "Times New Roman", fontsize = 10))
+
+y_lab <- y_bar - unit(1.2, "mm")
+
+lab <- textGrob("*", x = 0.5, y = y_lab, vjust = 0.5,
+                gp = gpar(fontfamily = "Times New Roman", fontsize = 14))
 
 bracket <- grobTree(
   segmentsGrob(x0 = 0.25, x1 = 0.75, y0 = y_bar, y1 = y_bar),
