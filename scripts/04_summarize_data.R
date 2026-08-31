@@ -10,7 +10,7 @@ survey_processed <- read_csv(here("data", "processed", "survey_individual.csv"))
 # Demographics ------------------------------------------------------------
 
 summary(survey_processed$age)
-summary(factor(survey_processed$sex))
+summary(factor(survey_processed$sex)). # 1 == male, 2 == female
 
 # Correlation table with means and SDs ------------------------------------
 
@@ -33,6 +33,7 @@ corr_means_sds <- corr_vars |>
 
 correlations_sig <- Hmisc::rcorr(as.matrix(corr_vars),
                                  type = "spearman")
+
 
 # Descriptives by condition -----------------------------------------------
 
@@ -104,3 +105,37 @@ boxplot(expert_influence ~ virtuality_condition, data = team_data, main = "Exper
 boxplot(performance_score ~ expert_location, data = team_data, main = "Performance by Expert Location")
 boxplot(demon_team_median ~ expert_location, data = team_data, main = "Demonstrability by Expert Location")
 boxplot(expert_influence ~ expert_location, data = team_data, main = "Expert Influence by Expert Location")
+
+# Descriptives and correlations table (manuscript table format) -----------
+
+table_vars <- team_data |>
+  select(demon_team_median,
+         performance_score,
+         exp_part_in_zoom,
+         exp_part_in_app,
+         expert_influence)
+
+rc <- Hmisc::rcorr(as.matrix(table_vars), type = "spearman")
+
+r_mat <- round(rc$r, 2)
+p_mat <- rc$P
+
+stars <- ifelse(p_mat < .001, "***", ifelse(p_mat < .01, "**", ifelse(p_mat < .05, "*", "")))
+r_star <- matrix(paste0(format(r_mat, nsmall = 2), stars),
+                 nrow = nrow(r_mat), dimnames = dimnames(r_mat))
+r_star[upper.tri(r_star, diag = TRUE)] <- ""
+
+k <- ncol(table_vars)
+desc_table <- data.frame(
+  Variable = paste0(seq_len(k), ". ", names(table_vars)),
+  M  = round(colMeans(table_vars, na.rm = TRUE), 2),
+  SD = round(apply(table_vars, 2, sd, na.rm = TRUE), 2),
+  N  = diag(rc$n),
+  r_star[, -k],
+  check.names = FALSE
+)
+names(desc_table)[-(1:4)] <- seq_len(k - 1)
+
+write.csv(desc_table,
+          here("output", "tables", "descriptives_correlations.csv"),
+          row.names = FALSE)
