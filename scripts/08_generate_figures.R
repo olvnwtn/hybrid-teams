@@ -14,28 +14,14 @@ team_data <- team_data |>
          expert_location = factor(expert_location,
                                   levels = c("Co-located", "Remote")))
 
-# H1: Demonstrability by virtuality ---------------------------------------
 
-ggplot(team_data,
-       aes(x = virtuality_condition, y = demon_team_median,
-           fill = virtuality_condition)) +
-  geom_boxplot(notch = T) +
-  labs(x = "", y = "Median Group Demonstrability") +
-  scale_x_discrete(labels = c("Matched" = "Matched Virtuality",
-                              "Mixed" = "Mixed Virtuality")) +
-  #scale_y_continuous(limits = c(4, 7)) +
-  guides(fill = "none") +
-  scale_fill_manual(values = c("Matched" = "white", "Mixed" = "gray65")) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(size = rel(1.15)))
+# H1: Demonstrability by condition ----------------------------------------
+# Faceted, grouped notched boxplots with significance bracket for h1a
+# The bracket is added post hoc as a grid grob spanning both panel cells
+# of the gtable (ggplot2 internals; gtable::gtable_add_grob), so it cannot
+# affect scales and draws inside the plot grid.
 
-ggsave(here("output", "figures", "demon_by_virtuality.png"),
-       width = 6, height = 6, dpi = 330)
-
-# Demonstrability by condition: faceted notched boxplots with a cross-panel
-# significance bracket for the virtuality main effect.
-
-# Faceted base -----------------------------------------------------------
+# Faceted base
 
 p <- ggboxplot(team_data,
                x = "expert_location",
@@ -50,40 +36,32 @@ p <- ggboxplot(team_data,
   scale_fill_manual(values = c("white", "gray65"), guide = "none") +
   scale_x_discrete(expand = expansion(add = 0.3)) +
   labs(x = "Expert Location", y = "Median Group Demonstrability") +
-  coord_cartesian(xlim = c(0.5, 2.5), ylim = c(4, 7.7), clip = "off") +
+  coord_cartesian(xlim = c(0.5, 2.5), ylim = c(4, 7.3), clip = "off") +
   theme(text = element_text(family = "Times New Roman"),
         panel.spacing = unit(0, "pt"),
         panel.grid.major.y = element_line(color = "gray95"),
         panel.grid.minor.y = element_line(color = "gray95"))
 
-# Cross-panel bracket (virtuality main effect) plus
-# within-panel bracket (H1A: F2F vs Remote) ------------------------------
+# Within-panel bracket (H1A: F2F vs Remote)
+# npc coordinates within the region spanning both panels:
+# the left panel's two box centers sit at ~0.154 and ~0.346
 
-y_lab  <- y_bar - unit(1.2, "mm")
-y_lab2 <- y_bar2 - unit(1.2, "mm")
+y_bar <- unit(1, "npc") - unit(10, "mm")
+y_tip <- y_bar - unit(3, "mm")
+y_lab <- y_bar - unit(1.2, "mm")
 
-lab <- textGrob("*", x = 0.5, y = y_lab, vjust = 0.5,
+lab <- textGrob("*", x = 0.25, y = y_lab, vjust = 0.5,
                 gp = gpar(fontfamily = "Times New Roman", fontsize = 14))
 
-lab2 <- textGrob("*", x = 0.25, y = y_lab2, vjust = 0.5,
-                 gp = gpar(fontfamily = "Times New Roman", fontsize = 14))
 bracket <- grobTree(
-  segmentsGrob(x0 = 0.25, x1 = 0.75, y0 = y_bar, y1 = y_bar),
-  segmentsGrob(x0 = 0.25, x1 = 0.25, y0 = y_bar, y1 = y_tip),
-  segmentsGrob(x0 = 0.75, x1 = 0.75, y0 = y_bar, y1 = y_tip),
-  rectGrob(x = 0.5, y = y_lab,
+  segmentsGrob(x0 = 0.154, x1 = 0.346, y0 = y_bar, y1 = y_bar),
+  segmentsGrob(x0 = 0.154, x1 = 0.154, y0 = y_bar, y1 = y_tip),
+  segmentsGrob(x0 = 0.346, x1 = 0.346, y0 = y_bar, y1 = y_tip),
+  rectGrob(x = 0.25, y = y_lab,
            width = grobWidth(lab) + unit(2, "mm"),
            height = grobHeight(lab) + unit(1.5, "mm"),
            gp = gpar(fill = "white", col = NA)),
   lab,
-  segmentsGrob(x0 = 0.154, x1 = 0.346, y0 = y_bar2, y1 = y_bar2),
-  segmentsGrob(x0 = 0.154, x1 = 0.154, y0 = y_bar2, y1 = y_tip2),
-  segmentsGrob(x0 = 0.346, x1 = 0.346, y0 = y_bar2, y1 = y_tip2),
-  rectGrob(x = 0.25, y = y_lab2,
-           width = grobWidth(lab2) + unit(2, "mm"),
-           height = grobHeight(lab2) + unit(1.5, "mm"),
-           gp = gpar(fill = "white", col = NA)),
-  lab2,
   segmentsGrob(x0 = -0.008, x1 = 0.008, y0 = 0.012, y1 = 0.022),
   segmentsGrob(x0 = -0.008, x1 = 0.008, y0 = 0.028, y1 = 0.038)
 )
@@ -100,7 +78,6 @@ grid.draw(g)
 
 ggsave(here("output", "figures", "demon_by_condition.png"), plot = g,
        width = 2300, height = 2000, units = "px", dpi = 330)
-
 
 # H2: Performance by virtuality ------------------------------------------
 
@@ -119,13 +96,12 @@ ggplot(team_data,
 ggsave(here("output", "figures", "perf_by_virtuality.png"),
        width = 6, height = 6, dpi = 330)
 
-# Performance by condition: faceted notched boxplots with a cross-panel
-# significance bracket for the virtuality main effect.
-# The bracket is added post hoc as a grid grob spanning both panel cells
-# of the gtable (ggplot2 internals; gtable::gtable_add_grob), so it cannot
-# affect scales and draws inside the plot grid.
+# H1A: Performance by condition -------------------------------------------
 
-# Faceted base -----------------------------------------------------------
+# Faceted notched boxplots with a cross-panel significance bracket for 
+# the virtuality main effect.
+
+# Faceted base
 
 p <- ggboxplot(team_data,
                x = "expert_location",
@@ -146,17 +122,12 @@ p <- ggboxplot(team_data,
         panel.grid.major.y = element_line(color = "gray95"),
         panel.grid.minor.y = element_line(color = "gray95"))
 
-# Cross-panel bracket ----------------------------------------------------
+# Cross-panel bracket
 # npc coordinates within the region spanning both panels:
 # each panel's center (between its two boxes) sits at ~0.25 and ~0.75
 
 y_bar <- unit(1, "npc") - unit(8, "mm")
 y_tip <- y_bar - unit(3, "mm")
-y_lab <- unit(1, "npc") - unit(5, "mm")
-
-lab <- textGrob(expression(italic(p)~"= .019"), x = 0.5, y = y_lab,
-                gp = gpar(fontfamily = "Times New Roman", fontsize = 10))
-
 y_lab <- y_bar - unit(1.2, "mm")
 
 lab <- textGrob("*", x = 0.5, y = y_lab, vjust = 0.5,
