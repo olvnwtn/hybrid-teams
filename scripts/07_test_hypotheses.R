@@ -70,6 +70,8 @@ h1_contrasts <- emmeans::contrast(
 summary(h1_contrasts)
 confint(h1_contrasts)
 
+saveRDS(h1_contrasts, here("output", "models", "h1_contrasts.rds"))
+
 # H2: Performance ~ virtuality x expert location -------------------------
 
 # Two way ANOVA
@@ -123,6 +125,8 @@ h2_contrasts <- emmeans::contrast(
 )
 summary(h2_contrasts)
 confint(h2_contrasts)
+
+saveRDS(h2_contrasts, here("output", "models", "h2_contrasts.rds"))
 
 # H3: Mediation analyses --------------------------------------------------
 
